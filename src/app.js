@@ -30,13 +30,13 @@ const Mymodel = mongoose.model("Mycollection", mySchema)
 //Create/Insert a document
 const createDocument = async () => {
     try{    
-            // const firstEmp = new Mymodel({
-            // name: "Tanu",
-            // city: "Bangalore",
-            // age: 23,
-            // role: "Back End Developer",
-            // active: true
-            // })  
+            const firstEmp = new Mymodel({
+            name: "Tanu",
+            city: "Bangalore",
+            age: 23,
+            role: "Back End Developer",
+            active: true
+            })  
 
 //Insert multiple document
             const secondEmp = new Mymodel({
@@ -89,15 +89,79 @@ const getDocument = async () => {
     .select({name:1})
     .skip(1)
     .limit(1)
+    const result4 = await Mymodel.find({role: {$in: ["Back End Developer", "Front End Developer"]}})
+    const result5 = await Mymodel.find({role: {$in: ["Back End Developer", "Front End Developer"]}})
+    const result6 = await Mymodel.find()
+    .sort({name: 1})
     console.log(result);
     console.log(result2);
     console.log(result3);
+    console.log(result4);
+    console.log(result5);
+    console.log(result6);
     }catch(err){
         console.log(err);
     }
 }
 
-getDocument();
+// getDocument();
 
+//Update the document
+//Difference between updateOne/updatemany and findByIdAndUpdate is that when we print the result in console, in case of updateOne/updatemany we get the updated value but in case of findByIdAndUpdate we get the previous value while it is updated in the database.
+const updateDocument = async (_id) => {
+    try{
+   const result = await Mymodel.updateOne({_id}, {
+    $set: {
+        city: "Delhi"
+    }
+   });
+   console.log(result);
+}catch(err){
+    console.log(err);
+}
+}
 
+// updateDocument("64203db3800ae4d8a2bc1ef4");
 
+//OR
+const updateByFindDocument = async (_id) => {
+    try{
+   const result = await Mymodel.findByIdAndUpdate({_id}, {
+    $set: {
+        city: "Pune"
+    }
+   },{
+        useFindAndModify : false
+    });
+   console.log(result);
+}catch(err){
+    console.log(err);
+}
+}
+
+// updateByFindDocument("642038a49cdc1a9c9845c41e");
+
+//Delete a document
+
+const deleteDocument = async (_id) => {
+    try{
+   const result = await Mymodel.deleteOne({_id});
+   console.log(result);
+}catch(err){
+    console.log(err);
+}
+}
+
+// deleteDocument("642038a49cdc1a9c9845c410");
+
+//OR
+const deleteByFindDocument = async (_id) => {
+    try{
+   const result = await Mymodel.findByIdAndDelete({_id});
+   console.log(result);
+}catch(err){
+    console.log(err);
+}
+}
+
+// deleteByFindDocument("642038a49cdc1a9c9845c410")
