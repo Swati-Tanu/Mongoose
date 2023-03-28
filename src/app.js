@@ -1,10 +1,11 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 //Connecting to the local MongoDB
 mongoose.connect("mongodb://127.0.0.1:27017/MasterMongoose",{
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useCreateIndex: true
+    // useCreateIndex: true
 })
 .then(() => console.log("Connection Successful..."))
 .catch((err) => console.log(err));
@@ -28,12 +29,30 @@ const mySchema = new mongoose.Schema({
                 throw new Error("Age should be more than 0")
             }
         }
+        // validate:{       //Traditional way to write custom validation
+        //     validator: {
+        //         validator: function(value){
+        //             return value.length < 0
+        //         },
+        //         message: "Age should be more than 0"
+        //     }
+        // }
     },
     role: {
         type: String,
         minlength: [2, "Minimum 2 letters required"], //built-in validation
         maxlength: 100, //built-in validation
         enum: ["Front End Developer", "Back End Developer", "Full Stack Web End Developer"]
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        validate(value){ //Using NPM validator package
+            if(!validator.isEmail(value)){
+                throw new Error("Email is invalid")
+            }
+        }   
     },
     active: Boolean,
     date: {
@@ -53,6 +72,7 @@ const createDocument = async () => {
             city: "Bangalore",
             age: 23,
             role: "Back End Developer",
+            email: "tanu@gmail.com",
             active: true
             })  
 
@@ -62,6 +82,7 @@ const createDocument = async () => {
             city: "Delhi",
             age: 22,
             role: "Front End Developer",
+            email: "sarthak@gmail.com",
             active: true
             })  
 
@@ -70,6 +91,7 @@ const createDocument = async () => {
             city: "Gurgaon",
             age: 24,
             role: "Back End Developer",
+            email: "ayush@gmail.com",
             active: true
             })
 
@@ -78,6 +100,7 @@ const createDocument = async () => {
             city: "Noida",
             age: 25,
             role: "Back End Developer",
+            email: "sourabh@gmail.com",
             active: true
             })
 
@@ -183,5 +206,9 @@ const deleteByFindDocument = async (_id) => {
 }
 
 // deleteByFindDocument("642038a49cdc1a9c9845c410")
+
+
+
+
 
 
