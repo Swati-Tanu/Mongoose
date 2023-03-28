@@ -3,7 +3,8 @@ const mongoose = require("mongoose");
 //Connecting to the local MongoDB
 mongoose.connect("mongodb://127.0.0.1:27017/MasterMongoose",{
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
 })
 .then(() => console.log("Connection Successful..."))
 .catch((err) => console.log(err));
@@ -22,12 +23,17 @@ const mySchema = new mongoose.Schema({
     },
     age: {
         type: Number,
-        enum: [21,22,23,24,25,26,27,28,29,30], //built-in validation
+        validate(value){ //custom validation
+            if(value<0){
+                throw new Error("Age should be more than 0")
+            }
+        }
     },
     role: {
         type: String,
         minlength: [2, "Minimum 2 letters required"], //built-in validation
-        maxlength: 20, //built-in validation
+        maxlength: 100, //built-in validation
+        enum: ["Front End Developer", "Back End Developer", "Full Stack Web End Developer"]
     },
     active: Boolean,
     date: {
