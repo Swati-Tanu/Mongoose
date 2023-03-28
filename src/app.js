@@ -12,11 +12,23 @@ mongoose.connect("mongodb://127.0.0.1:27017/MasterMongoose",{
 const mySchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
-    city: String,
-    age: Number,
-    role: String,
+    city: {
+        type: String,
+        uppercase: true, //built-in validation
+        trim: true //built-in validation
+    },
+    age: {
+        type: Number,
+        enum: [21,22,23,24,25,26,27,28,29,30], //built-in validation
+    },
+    role: {
+        type: String,
+        minlength: [2, "Minimum 2 letters required"], //built-in validation
+        maxlength: 20, //built-in validation
+    },
     active: Boolean,
     date: {
         type: Date,
@@ -41,35 +53,35 @@ const createDocument = async () => {
 //Insert multiple document
             const secondEmp = new Mymodel({
             name: "Sarthak",
-            city: "Bangalore",
-            age: 23,
+            city: "Delhi",
+            age: 22,
             role: "Front End Developer",
             active: true
             })  
 
             const thirdEmp = new Mymodel({
             name: "Ayush",
-            city: "Bangalore",
-            age: 23,
+            city: "Gurgaon",
+            age: 24,
             role: "Back End Developer",
             active: true
             })
 
             const forthEmp = new Mymodel({
             name: "Sourabh",
-            city: "Bangalore",
-            age: 23,
+            city: "Noida",
+            age: 25,
             role: "Back End Developer",
             active: true
             })
 
             //Calling one document
-            // const result = await firstEmp.save();
-            // console.log(result); 
+            const result = await firstEmp.save();
+            console.log(result); 
 
             //Calling many documents
-            const result = await Mymodel.insertMany([secondEmp, thirdEmp, forthEmp])
-            console.log(result);  
+            const result2 = await Mymodel.insertMany([secondEmp, thirdEmp, forthEmp])
+            console.log(result2);  
              
 
     }catch(err){
@@ -77,7 +89,7 @@ const createDocument = async () => {
     }
 }
 
-// createDocument();
+createDocument();
 
 //Read the document
 const getDocument = async () => {
@@ -165,3 +177,5 @@ const deleteByFindDocument = async (_id) => {
 }
 
 // deleteByFindDocument("642038a49cdc1a9c9845c410")
+
+
