@@ -48,7 +48,7 @@ const mySchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        validate(value){ //Using NPM validator package
+        validate(value){ //Using NPM - validator package
             if(!validator.isEmail(value)){
                 throw new Error("Email is invalid")
             }
